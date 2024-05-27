@@ -1,0 +1,249 @@
+\documentclass[11pt]{article}
+
+\usepackage{amssymb, amsthm, linguex, enumerate, amsmath}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with`a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Math 325 - Homework 09}
+\author{Matthew Wilder}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+    % Problem #1
+  \item Let \(Y_1\) and \(Y_2\) be discrete random variables with joint probability function \(p(y_1, y_2)\).
+      \\Prove that \(E(Y_1) = E(E(Y_1|Y_2))\)
+      \begin{proof}
+      By definition of expected values, we know that \(E(E(Y_1|Y_2))\) can be rewritten as
+      \\$$\sum_{y_1}\sum_{y_2}\,p(y_1) \cdot p(y_1, y_2)$$	
+      \\And since \(p(y_1 | y_2) = \frac{p(y_1, y_2)}{p(y_2)}\), we can solve for \(p(y_1, y_2)\) to get
+      \\$$p(y_1, y_2) = p(y_2)\cdot p(y_1 | y_2)$$
+      \\Substituting into the previous sum we obtain,
+      \\$$\sum_{y_1}\sum_{y_2}\,p(y_1) \cdot p(y_2) \cdot p(y_1 | y_2)$$
+      \\Because \(p(y_1)\) is held constant with respect to \(y_2\), we can factor it out of the inner sum to obtain
+      \\$$\sum_{y_1}p(y_1)\sum_{y_2}\,p(y_2) \cdot p(y_1 | y_2)$$
+      \\Using definition of \(E(g(Y_1) | Y_2=y_2) = \sum_{y_1}\,g(y_1) \cdot p(y_1 | y_2)\), we can substitute the inner sum with \(E(Y_1 | Y_2)\), thus obtaining
+      \\$$\sum_{y_1}p(y_1) E(Y_1 | Y_2)$$
+      \\Which, again, by definition of \(E(Y_1 | Y_2)\), we know that this is equivalent to \((E(Y_1)\)
+      $$\boxed{\therefore E(Y_1) = E(E(Y_1 | Y_2)}$$
+      \end{proof}
+  \item Suppose that \(Y\) has a binomial distribution with parameters \(n\) and \(p\)
+  but that \(p\) varies from day to day according to the beta distribution with parameters \(\alpha\) and \(\beta\). Show that
+    \begin{enumerate}[(a)]
+        \item \(E(Y) = \frac{n \alpha}{\alpha + \beta} \)
+        \begin{proof}
+            We will rewrite \(E(Y)\) as \(E(E(Y|p))\) and for any given \(p\), \(Y\) is a binomial distribution.
+            \\\\ Thus, the expected value, \(E(Y|p) = n p\) by definition of a binomial distribution.
+            \\\\ Therefore, we obtain \(E(n p)\). But, because \(n\) is held constant, we can factor it out by linearity to obtain \(n \cdot E(p)\).
+            \\\\ Finally, because \(p\) varies via a beta distribution, we know that \(E(p) = \frac{\alpha}{\alpha + \beta}\) by definition. Thus, \(n E(p) = n \frac{\alpha}{\alpha + \beta}\)
+            \\ $$\boxed{\therefore E(Y) = \frac{n \alpha}{\alpha + \beta}}$$
+        \end{proof}
+        \item \(Var(Y) = \frac{n \alpha \beta (\alpha + \beta + n)}{(\alpha + \beta)^2 (\alpha + \beta + 1)}\)
+        \begin{proof}
+            By definition, we know that \(Var(Y) = E(Var(Y|p)) + Var(E(Y|p))\)
+            \\\\Using the \(E(Y|p)\) obtained from part (a), we can simplify the expression into
+            $$Var(Y) = E(Var(Y|p)) + Var(n p)$$
+            \\And by the definition of variance, the \(n\) can be pulled out to obtain
+            $$Var(Y) = E(Var(Y|p)) + n^2 Var(p)$$
+            \\Then, by definition from the beta distribution, we can substitute in for \(Var(P)\)
+            $$Var(Y) = E(Var(Y|p)) + \frac{n^2 \cdot \alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}$$
+            \\Since \(Y\) is a binomial distribution, therefore \(Var(Y|p) = n p q\) by definition. Then
+            \begin{align}
+                E(Var(Y|p)) &= E(n p q) \notag && \text{by definition of variance}
+                \\&= n E(p q) \notag && \text{by linearity of expectation}
+                \\&= n E(p (1-p)) \notag && \text{by \(q = 1 - p\)}
+                \\&= n E(p - p^2) \notag && \text{by distribution}
+                \\&= n E(p) - n E(p^2) \notag && \text{by linearity of expectation}
+            \end{align}
+            \\Now we need to compute the value of \(E(p^2)\)
+            \begin{align}
+                Var(p) &= E(p^2) - [E(p)]^2 \notag && \text{by definition of variance}
+                \\E(p^2) &= Var(p) + [E(p)]^2 \notag && \text{solve for \(E(p^2)\)}
+                \\&= \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)} + \bigg[\frac{\alpha}{\alpha + \beta}\bigg]^2 \notag && \text{by definitions of Beta distribution}
+                \\&= \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)} + \frac{\alpha^2}{(\alpha + \beta)^2} \notag && \text{by distribution of squared term}
+                \\&= \frac{\alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)} + \frac{\alpha^2 (\alpha + \beta + 1)}{(\alpha + \beta)^2 (\alpha + \beta + 1)} \notag && \text{multiply by a fancy 1 (\(\frac{\alpha + \beta + 1}{\alpha + \beta + 1}\))}
+                \\&= \frac{\alpha \beta + \alpha^2 (\alpha + \beta + 1)}{(\alpha + \beta)^2 (\alpha + \beta + 1)} \notag && \text{add fractions with same denominator}
+            \end{align}
+            $$\therefore E(p^2) = \frac{\alpha \beta + \alpha^2 (\alpha + \beta + 1)}{(\alpha + \beta)^2 (\alpha + \beta + 1)}$$
+            \\Returning to \(E(Var(Y|p)) = n E(p) - n E(p^2)\), we know \(E(p)\) is \(\frac{\alpha}{\alpha + \beta}\) by definition of a beta distribution. Using the \(E(p^2)\) that we just computed and \(E(Var(Y|p) = n E(p) - n E(p^2)\) we get
+            $$E(Var(Y|p) = n \frac{\alpha}{\alpha + \beta} - n \frac{\alpha \beta + \alpha^2 (\alpha + \beta + 1)}{(\alpha + \beta)^2 (\alpha + \beta + 1)} $$
+            \\Recall that \(Var(Y) = E(Var(Y|p)) + \frac{n^2 \cdot \alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)}\). Substituting in the above value of \(E(Var(Y|p))\) we obtain the following: \\
+            \begin{align}
+                Var(Y) &= n \frac{\alpha}{\alpha + \beta}
+                - n \frac{\alpha \beta + \alpha^2 (\alpha + \beta + 1)}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
+                + \frac{n^2 \cdot \alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)} 
+                \notag
+                %
+                \\\notag\\&= n \bigg[ \frac{\alpha}{\alpha + \beta}
+                - \frac{\alpha \beta + \alpha^2 (\alpha + \beta + 1)}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
+                + \frac{n \cdot \alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)} \bigg] 
+                \notag
+                \text{ Factor out \(n\)}
+                %
+                \\\notag\\&= n \bigg[ \frac{\alpha (\alpha + \beta) (\alpha + \beta + 1)}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
+                - \frac{\alpha \beta + \alpha^2 (\alpha + \beta + 1)}{(\alpha + \beta)^2 (\alpha + \beta + 1)}
+                + \frac{n \cdot \alpha \beta}{(\alpha + \beta)^2 (\alpha + \beta + 1)} \bigg] 
+                \notag
+                \text{ Multiply fancy 1}
+                %
+                \\\notag\\&= n \bigg[
+                \frac{
+                \alpha (\alpha + \beta) (\alpha + \beta + 1)
+                - \Big(\alpha \beta + \alpha^2 (\alpha + \beta + 1)\Big)
+                + n \cdot \alpha \beta} {
+                (\alpha + \beta)^2 (\alpha + \beta + 1)
+                }
+                \bigg] 
+                \notag
+                \text{ Combine fractions}
+                %
+                \\\notag\\&= n \bigg[
+                \frac{
+                \Big(\alpha^3 + 2 \alpha^2 \beta + \alpha^2 + \alpha \beta^2 + \alpha \beta \Big)
+                - \Big(\alpha \beta + \big(\alpha^3 + \alpha^2\beta + \alpha^2\big)\Big)
+                + n \cdot \alpha \beta} {
+                (\alpha + \beta)^2 (\alpha + \beta + 1)
+                }
+                \bigg] 
+                \notag
+                \text{ Distribute terms}
+                %
+                \\\notag\\&= n \bigg[
+                \frac
+                {
+                    \alpha^2 \beta
+                    + \alpha \beta^2
+                    + n \alpha \beta
+                }
+                {
+                    (\alpha + \beta)^2 (\alpha + \beta + 1)
+                }
+                \bigg] 
+                \notag
+                \text{ Combine like terms}
+                %
+                \\\notag\\&= n \bigg[
+                \frac
+                {
+                    \alpha \beta
+                    (\alpha + \beta + n)
+                }
+                {
+                    (\alpha + \beta)^2 (\alpha + \beta + 1)
+                }
+                \bigg] 
+                \notag
+                \text{ Factor out \(\alpha \beta\)}
+                %
+                \\\notag\\&=
+                \frac
+                {
+                    n \alpha \beta
+                    (\alpha + \beta + n)
+                }
+                {
+                    (\alpha + \beta)^2 (\alpha + \beta + 1)
+                }
+                \notag
+                \text{ Multiply in the \(n\)}
+            \end{align}
+            $$\boxed{\therefore Var(Y) = 
+            \frac
+            {
+                n \alpha \beta (\alpha + \beta + n)
+            }
+            {
+                (\alpha + \beta)^2 (\alpha + \beta + 1)
+            }}$$
+        \end{proof}
+    \end{enumerate}
+    %
+    %problem #3
+    \item Suppose that X and Y have a joint uniform density over the unit square. Find the pdf for their product, that is, find \(f_U(u)\), where \(U = X Y\)
+    \\\\\emph{Answer.} Using the given fact that \(X\) and \(Y\) are over a unit square, we can define
+    $$f(x, y) = \Bigg\{ \begin{array}{cc}
+    1 & x, y \in [0, 1]\\
+    0 & elsewhere\end{array}$$
+    \\When \(X, Y = (0, 0)\), \(U = 0\)
+    \\When \(X, Y = (1, 0)\), \(U = 0\)
+    \\When \(X, Y = (0, 1)\), \(U = 0\)
+    \\When \(X, Y = (1, 1)\), \(U = 1\)
+    \\\(\therefore U\) \(\in\) [0,1]\\
+        \\By our given, \(U = XY\), we can substitute in for \(U\) and solve for \(Y\) to get a CDF in the following form\\
+     \begin{align}
+                F_U(u) &= P(U \leq u) \notag && \text{by definition of CDF}
+                \\&= P( X Y \leq u) \notag && \text{by substitution \(U = X Y\)}
+                \\&= P\Big(Y \leq \frac{u}{X}\Big) \notag && \text{solving for \(Y\)}
+                \\&= \Bigg( 1 - P\Big(Y \geq \frac{u}{X}\Big)\Bigg) \notag && \text{By definition that probability sums to 1}
+                \\&= 1 - \int_{u}^{1} \int_{\frac{u}{x}}^{1} f(x,y) \,dy \,dx \notag && \text{by definition of the CDF}
+                \\&= 1 - \int_{u}^{1} \int_{\frac{u}{x}}^{1} 1 \,dy \,dx \notag && \text{since \(f(x,y) = 1\) on the support}\\
+                &= 1 - \int_{u}^{1} \Big( y \big|_{y = \frac{u}{x}}^{1} \Big) \,dx \notag && \text{By FTC}\\
+                &= 1 - \int_{u}^{1} 1 - \frac{u}{x} \,dx \notag && \text{By evaluation}\\
+                &= 1 -\bigg( x - u \cdot ln|x| \Big|_{x = u}^{1} \bigg) \notag && \text{By FTC}\\
+                &= 1 - \Big[ \big( 1 - u \cdot ln(1) \big) - \big( u - u \cdot ln(u) \big) \Big] \notag && \text{By evaluation}\\
+                &= 1 - \Big[ \big( 1 - 0 \big) - \big( u - u \cdot ln(u) \big) \Big] \notag && \text{By \(ln(1) = 0\)}\\
+                &= 1 - \Big( 1 - u + u \cdot ln(u) \Big) \notag && \text{By simplification}\\
+                &= u - u \cdot ln(u) , \text{ } u > 0 \notag && \text{By simplification}\\
+                \notag
+            \end{align}
+            We can now write the piecewise CDF as
+        $$F_U(u) = \Bigg\{ \begin{array}{cc}
+        0 & u \in (-\infty, 0]\\
+        u - u \cdot ln(u) & u \in (0, 1]\\
+        1 & u \in (1, \infty) \end{array}$$
+        \\Differentiating the CDF, we can obtain the PDF. The derivative of \(u - u \cdot ln(u)\) is a chain rule, \( 1 - \big(u \cdot \frac{du}{u}ln(u) + \frac{du}{d}u \cdot ln(u)\big) =  1 - \big(u \cdot \frac{1}{u} + 1 \cdot ln(u)\big) = 1 - (1 + ln(u)) = -ln(u)\), and there derivative of constants 1 and 0 are both 0.
+                $$\boxed{ \therefore f_U(u) = \Bigg\{ \begin{array}{cc}
+        -ln(u) & u \in (0, 1]\\
+        0 & elsewhere \end{array}}$$
+        
+     %
+    %problem #4
+    \item Let \(X_1, X_2, ..., X_n\) be independent random variables with Poisson distributions and with parameter \(\lambda_i\), respectively. Let \(U = X_1 + \cdots + X_n\). Show that \(U\) has a Poisson distribution and determine \(U\)'s parameter \(\lambda_U\)
+    \begin{proof}
+        Let \(m(t)\) denote the moment generating function for a Poisson distribution. Then
+        $$m(t) = e^{\lambda (e^t-1)}$$
+        \\We know that \(m_U(t)\) will be the product of the the n-many \(m_x(t)\) moment generating functions that \(U\) consists of, therefore:
+        $$m_U(t) = \prod_{i=1}^{n} m_{x_i}(t) = m_{x_1}(t) \cdot m_{x_2}(t) \cdots m_{x_n}(t)$$
+        \\Each \(m_{x_i}\) term is a Poisson distribution by definition, and thus each \(m_{x_i}\) has the moment generating function \(m(t) = e^{\lambda_i (e^t-1)}\). We can substitute this into the product to obtain the following:
+        $$m_U(t) = \prod_{i=1}^{n} e^{\lambda_i (e^t-1)}$$
+        \\By the laws of exponents, this can be rewritten into the following form,
+        $$m_U(t) = e^{\sum_{i=1}^{n}\lambda_i (e^t-1)}$$
+        \\And the (\(e^t-1\)) term is independent of \(i\), therefore we can factor it out of the sum to obtain
+        $$m_U(t) = e^{(e^t-1)\sum_{i=1}^{n}\lambda_i }$$
+        \\We define \(\lambda_U\) as \(\sum_{i=1}^{n}\lambda_i\) and thus the moment generating function of \(U\) can be rewritten as
+        $$m_U(t) = e^{\lambda_U (e^t-1)}$$
+        \\Which, letting \(\lambda_U\) be the coefficient in the Poisson moment generating function \\\(m(t) = e^{\lambda (e^t-1)}\), then \(\lambda_U = \lambda\) is exactly the form of the Poisson moment generating function.
+        \\$$ \boxed{\therefore m_U(t) = e^{\lambda_U (e^t-1)} }$$
+    \end{proof}
+    %
+    %problem #5
+    \item Let \(X_1, X_2, ..., X_n\) denote a random sample of size \(n\) from a distribution which is normal \(N(\mu, \sigma)\). Define \(U = \sum_{i=1}^{\infty} \Big(\frac{X_i - \mu }{\sigma}\Big)^2\). Show that \(U\) has a \(\chi ^2\) with \(n\) degrees of freedom. (Hint: See Homework 6, Problem 5.)
+    \begin{proof}
+        Let \(Z_i = \frac{X_i - \mu}{\sigma}\), then \(U = \sum_{i=1}^n Z_i^2\). By Homework 6, Problem 5, we know that \(Z_i^2\) has a gamma distribution with \(\alpha = \frac{1}{2}\) and \(\beta = 2\).
+        \\\\A gamma distribution with \(\alpha = \frac{1}{2}\) and \(\beta = 2\) is a chi-squared distribution (\(\chi^2\)) with 1 degree of freedom by the definitions of \(\Gamma\) and \(\chi^2\) distributions.
+        \\\\The moment generating function for \(Z_i^2\) is \((1-2 t)^{-\frac{1}{2}}\), (1 degree of freedom). Because \(U\) is a sum of \(n\) of these distributions, the moment generating function \(m_U(t)\) is a product of each component's mgf, therefore
+        $$m_U(t) = \prod_{i=1}^{n} m_{x_i}(t) = m_{x_1}(t) \cdot m_{x_2}(t) \cdots m_{x_n}(t)$$
+        \\And then \(m_{x_i}(t)\) is \((1-2 t)^{-\frac{1}{2}}\)  \(\forall\) \(i \in [1, n]\), so
+        $$m_U(t) = \prod_{i=1}^n (1-2t)^{-\frac{1}{2}}$$
+        \\Since every term has the same base of \((1-2t)\), multiplication becomes the sum of their exponents, therefore
+        $$m_U(t) = (1-2t)^{\sum_{i=1}^n {-\frac{1}{2} }}$$
+        \\Using the definition that \(\sum_{i=1}^n c = n c\) we can rewrite this to become
+        $$m_U(t) = (1-2t)^{-\frac{n}{2}}$$
+        \\A \(\chi^2\) distribution with \(n\) degrees of freedom has the moment generating function \(m(t) = (1-2t)^{-\frac{n}{2}}\). But our computed \(m_U(t)\) also has this exact moment generating function. By the uniqueness of the moment generating function, \(U\) is a \(\chi^2\) distribution with \(n\) degrees of freedom.
+        $$\boxed{\therefore m_U(t) = (1-2t)^{-\frac{n}{2}} = \chi_n^2}$$
+    \end{proof}
+\end{enumerate}
+
+\end{document}
